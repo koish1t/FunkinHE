@@ -3,6 +3,8 @@
 #include <Input.h>
 #include <substates/PauseSubState.h>
 #include <iostream>
+#include "../game/Song.h"
+#include "../game/Conductor.h"
 
 PlayState* PlayState::instance = nullptr;
 
@@ -17,58 +19,36 @@ PlayState::~PlayState() {
 void PlayState::create() {
     Engine* engine = Engine::getInstance();
 
-    backgroundSprite = new Sprite("assets/images/background.png");
-    engine->addSprite(backgroundSprite);
+    try {
+        SwagSong songData = Song::loadFromJson("bopeebo-hard", "bopeebo");
+        if (!songData.validScore) {
+            throw std::runtime_error("Failed to load song data");
+        }
+        
+        Conductor::changeBPM(songData.bpm);
+        Conductor::mapBPMChanges(songData);
 
-    playerSprite = new AnimatedSprite();
-    playerSprite->setPosition(100, 100);
-    playerSprite->loadFrames("assets/images/BOYFRIEND.png", "assets/images/BOYFRIEND.xml");
-    
-    playerSprite->addAnimation("idle", "BF idle dance0", 24, true);
-    playerSprite->addAnimation("up", "BF NOTE UP0", 24, true);
-    playerSprite->addAnimation("down", "BF NOTE DOWN0", 24, true);
-    playerSprite->addAnimation("left", "BF NOTE LEFT0", 24, true);   
-    playerSprite->addAnimation("right", "BF NOTE RIGHT0", 24, true);
-    
-    engine->addAnimatedSprite(playerSprite);
-    playerSprite->playAnimation("idle");
+        std::cout << "Loaded song: " << songData.song 
+                  << " BPM: " << songData.bpm 
+                  << " Speed: " << songData.speed << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Error loading song: " << e.what() << std::endl;
+    }
 }
 
 void PlayState::update(float deltaTime) {
     if (!_subStates.empty()) {
         _subStates.back()->update(deltaTime);
-    } else {
-        playerSprite->update(deltaTime);
-        
-        if (Input::pressed(128)) {
-            playerSprite->playAnimation("up");
-        } else if (Input::pressed(129)) {
-            playerSprite->playAnimation("down");
-        } else if (Input::pressed(130)) {
-            playerSprite->playAnimation("left");
-        } else if (Input::pressed(131)) {
-            playerSprite->playAnimation("right");
-        } else {
-            playerSprite->playAnimation("idle");
-        }
-    }
+    } 
 }
 
 void PlayState::render() {
-    backgroundSprite->render();
-    playerSprite->render();
-
     if (!_subStates.empty()) {
         _subStates.back()->render();
     }
 }
 
 void PlayState::destroy() {
-    delete backgroundSprite;
-    delete playerSprite;
-
-    backgroundSprite = nullptr;
-    playerSprite = nullptr;
 }
 
 void PlayState::openSubState(SubState* subState) {
@@ -84,10 +64,6 @@ void PlayState::keyPressed(unsigned char key, int x, int y) {
         } else {
             instance->closeSubState();
         }
-    }
-
-    if (key == 'r') {
-        instance->playerSprite->playAnimation("idle");
     }
 }
 
