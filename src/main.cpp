@@ -13,8 +13,8 @@ int main(int argc, char** argv) {
     Discord::GetInstance().SetSmallImage("tetosigma");
     Discord::GetInstance().SetSmallImageText("I feel so sigma!");    
     Discord::GetInstance().Update();
-    
-    Engine engine(800, 600, "Friday Night Funkin' PE");
+
+    Engine engine(1280, 720, "Friday Night Funkin' PE");
     PlayState* initialState = new PlayState();
     engine.pushState(initialState);
     
