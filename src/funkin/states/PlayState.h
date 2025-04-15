@@ -2,6 +2,9 @@
 #include "../../engine/State.h"
 #include "../../engine/Sprite.h"
 #include "../../engine/AnimatedSprite.h"
+#include "../../engine/Input.h"
+#include "../substates/PauseSubState.h"
+#include "../../engine/Log.h"
 #include "../FunkinState.h"
 
 void playStateKeyboardCallback(unsigned char key, int x, int y);

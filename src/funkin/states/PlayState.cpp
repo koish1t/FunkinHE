@@ -40,6 +40,21 @@ void PlayState::update(float deltaTime) {
     if (!_subStates.empty()) {
         _subStates.back()->update(deltaTime);
     } 
+    else {
+        Input::UpdateKeyStates();
+        Input::UpdateControllerStates();
+
+        if (Input::justPressed(SDL_SCANCODE_RETURN) || Input::isControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_START)) {
+            if (_subStates.empty()) {
+                PauseSubState* pauseSubState = new PauseSubState();
+                openSubState(pauseSubState);
+                Log::getInstance().info("Pause SubState opened");
+            } else {
+                closeSubState();
+                Log::getInstance().info("Pause SubState closed");
+            }
+        }
+    }
 }
 
 void PlayState::render() {
@@ -54,30 +69,4 @@ void PlayState::destroy() {
 void PlayState::openSubState(SubState* subState) {
     std::cout << "PlayState::openSubState called" << std::endl;
     State::openSubState(subState);
-}
-
-void PlayState::keyPressed(unsigned char key, int x, int y) {
-    if (key == 'p') {
-        if (instance->_subStates.empty()) {
-            PauseSubState* pauseSubState = new PauseSubState();
-            instance->openSubState(pauseSubState);
-        } else {
-            instance->closeSubState();
-        }
-    }
-}
-
-void PlayState::specialKeyPressed(int key, int x, int y) {
-    std::cout << "Special key pressed: " << key << std::endl;
-    
-    int mappedKey;
-    switch(key) {
-        case GLUT_KEY_UP:    mappedKey = 128; break;
-        case GLUT_KEY_DOWN:  mappedKey = 129; break;
-        case GLUT_KEY_LEFT:  mappedKey = 130; break;
-        case GLUT_KEY_RIGHT: mappedKey = 131; break;
-        default: return;
-    }
-    
-    Input::handleKeyPress(mappedKey);
 }

@@ -1,7 +1,16 @@
+#ifdef __MINGW32__ || defined(__SWITCH__)
+#include "funkin/substates/PauseSubState.h"
+#include "engine/Engine.h"
+#include "engine/Input.h"
+#include "engine/SDLManager.h"
+#include <iostream>
+#else
+#include <substates/PauseSubState.h>
 #include <Engine.h>
 #include <Input.h>
-#include <substates/PauseSubState.h>
+#include <SDLManager.h>
 #include <iostream>
+#endif
 
 PauseSubState::PauseSubState() : pauseText(nullptr) {
 }
@@ -17,20 +26,17 @@ void PauseSubState::create() {
 }
 
 void PauseSubState::update(float deltaTime) {
-    if (Input::getInstance().isKeyJustPressed('p')) {
-        std::cout << "P key pressed in PauseSubState, closing" << std::endl;
+    if (Input::justPressed(SDL_SCANCODE_RETURN) || Input::isControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_START)) {
+        std::cout << "Start button pressed in PauseSubState, closing" << std::endl;
         getParentState()->closeSubState();
     }
 }
 
 void PauseSubState::render() {
-    glColor4f(0.0f, 0.0f, 0.0f, 0.5f);
-    glBegin(GL_QUADS);
-    glVertex2f(0, 0);
-    glVertex2f(800, 0);
-    glVertex2f(800, 600);
-    glVertex2f(0, 600);
-    glEnd();
+    SDL_SetRenderDrawColor(SDLManager::getInstance().getRenderer(), 0, 0, 0, 128);
+    SDL_Rect overlay = {0, 0, 800, 600};
+    SDL_RenderFillRect(SDLManager::getInstance().getRenderer(), &overlay);
+    SDL_SetRenderDrawColor(SDLManager::getInstance().getRenderer(), 255, 255, 255, 255);
 
     pauseText->render();
 }
