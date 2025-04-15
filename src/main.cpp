@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     int height = 720;
     int fps = 60;
     bool debug = true;
-    Engine engine(width, height, "Friday Night Funkin' PE", fps);
+    Engine engine(width, height, "Friday Night Funkin' HE", fps);
     engine.debugMode = debug;
     PlayState* initialState = new PlayState();
     engine.pushState(initialState);

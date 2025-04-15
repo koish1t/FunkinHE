@@ -8,6 +8,7 @@
 #include "../substates/PauseSubState.h"
 #include "../../engine/Log.h"
 #include "../game/Song.h"
+#include "../game/Note.h"
 #include "../FunkinState.h"
 #include "../../engine/SDLManager.h"
 #include <vector>
@@ -30,6 +31,7 @@ public:
     void startSong();
     void startCountdown();
     void generateStaticArrows(int player);
+    void generateNotes();
 
     static PlayState* instance;
     static SwagSong SONG;
@@ -37,10 +39,13 @@ public:
     bool startingSong = false;
     bool startedCountdown = false;
 
+    std::vector<Note*> unspawnNotes;
+
 private:
     std::string curSong;
     Sound* vocals = nullptr;
     std::vector<AnimatedSprite*> strumLineNotes;
+    std::vector<Note*> notes;
     const float STRUM_X = 42.0f;
     const float STRUM_X_MIDDLESCROLL = -278.0f;
     const std::vector<std::string> NOTE_STYLES = {"arrow", "arrow", "arrow", "arrow"};
