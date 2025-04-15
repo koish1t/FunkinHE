@@ -11,6 +11,7 @@
 #include "../game/Note.h"
 #include "../FunkinState.h"
 #include "../../engine/SDLManager.h"
+#include "../../engine/Text.h"
 #include <vector>
 #include <array>
 
@@ -32,6 +33,8 @@ public:
     void startCountdown();
     void generateStaticArrows(int player);
     void generateNotes();
+    void goodNoteHit(Note* note);
+    void noteMiss(int direction);
 
     static PlayState* instance;
     static SwagSong SONG;
@@ -40,6 +43,9 @@ public:
     bool startedCountdown = false;
 
     std::vector<Note*> unspawnNotes;
+    int combo = 0;
+    int score = 0;
+    int misses = 0;
 
 private:
     std::string curSong;
@@ -80,4 +86,6 @@ private:
 
     void handleInput();
     void updateArrowAnimations();
+    Text* scoreText;
+    void updateScoreText();
 };

@@ -40,4 +40,5 @@ public:
     bool tooLate;
     float noteScore;
     Note* prevNote;
+    bool kill = false;
 }; 

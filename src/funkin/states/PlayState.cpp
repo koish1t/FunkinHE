@@ -16,6 +16,13 @@ PlayState::PlayState() {
     inst = nullptr;
     vocals = nullptr;
     Note::loadAssets();
+    scoreText = new Text();
+    scoreText->setFormat("assets/fonts/vcr.ttf", 32, 0xFFFFFFFF);
+    
+    int windowWidth = Engine::getInstance()->getWindowWidth();
+    int windowHeight = Engine::getInstance()->getWindowHeight();
+    scoreText->setPosition(windowWidth / 2 - 100, windowHeight - 50);
+    updateScoreText();
 }
 
 PlayState::~PlayState() {
@@ -38,6 +45,7 @@ PlayState::~PlayState() {
     }
     notes.clear();
     
+    delete scoreText;
     Note::unloadAssets();
     destroy();
 }
@@ -92,8 +100,12 @@ void PlayState::update(float deltaTime) {
             if (note) {
                 note->update(deltaTime);
 
-                if (note->strumTime < Conductor::songPosition - 2000) {
-                    //delete note; // COMMENTED OUT BECAUSE THIS FUCKING DELETES ALL NOTES LOL
+                if (note->mustPress && note->tooLate && !note->wasGoodHit) {
+                    noteMiss(note->noteData);
+                    note->kill = true;
+                }
+
+                if (note->kill || note->strumTime < Conductor::songPosition - 5000) {
                     it = notes.erase(it);
                 } else {
                     ++it;
@@ -131,6 +143,19 @@ void PlayState::handleInput() {
         if (arrowIndex < strumLineNotes.size() && strumLineNotes[arrowIndex]) {
             if (isKeyJustPressed(i)) {
                 strumLineNotes[arrowIndex]->playAnimation("pressed");
+                
+                bool noteHit = false;
+                for (auto note : notes) {
+                    if (note && note->mustPress && !note->wasGoodHit && note->noteData == i && note->canBeHit) {
+                        goodNoteHit(note);
+                        noteHit = true;
+                        break;
+                    }
+                }
+                
+                if (!noteHit) {
+                    noteMiss(i);
+                }
             }
             else if (isKeyJustReleased(i)) {
                 strumLineNotes[arrowIndex]->playAnimation("static");
@@ -229,6 +254,8 @@ void PlayState::render() {
                 note->render();
             }
         }
+
+        scoreText->render();
 
         static int lastNoteCount = 0;
         if (notes.size() != lastNoteCount) {
@@ -370,4 +397,41 @@ void PlayState::destroy() {
 void PlayState::openSubState(SubState* subState) {
     std::cout << "PlayState::openSubState called" << std::endl;
     State::openSubState(subState);
+}
+
+void PlayState::updateScoreText() {
+    std::string text = "Score: " + std::to_string(score) + " Misses: " + std::to_string(misses);
+    scoreText->setText(text);
+}
+
+void PlayState::goodNoteHit(Note* note) {
+    if (!note->wasGoodHit) {
+        note->wasGoodHit = true;
+        
+        if (note->noteData >= 0 && note->noteData < 4) {
+            int arrowIndex = note->noteData + 4;
+            if (arrowIndex < strumLineNotes.size() && strumLineNotes[arrowIndex]) {
+                float currentX = strumLineNotes[arrowIndex]->getX();
+                float currentY = strumLineNotes[arrowIndex]->getY();
+                
+                strumLineNotes[arrowIndex]->playAnimation("confirm");
+                
+                strumLineNotes[arrowIndex]->setPosition(currentX, currentY);
+            }
+        }
+
+        combo++;
+        score += 350;
+        updateScoreText();
+        
+        note->kill = true;
+    }
+}
+
+void PlayState::noteMiss(int direction) {
+    combo = 0;
+    misses++;
+    score -= 10;
+    if (score < 0) score = 0;
+    updateScoreText();
 }
