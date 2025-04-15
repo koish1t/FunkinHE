@@ -2,6 +2,7 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
+#include "game/Conductor.h"
 
 const std::string FunkinState::soundExt = ".ogg";
 
@@ -10,6 +11,10 @@ FunkinState::FunkinState()
     , lastStep(0.0f)
     , curStep(0)
     , curBeat(0) {
+}
+
+FunkinState::~FunkinState() {
+    destroy();
 }
 
 void FunkinState::create() {

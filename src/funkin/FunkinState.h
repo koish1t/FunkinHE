@@ -1,28 +1,27 @@
 #pragma once
-#include <State.h>
+
+#include "../engine/State.h"
+#include "../engine/Sound.h"
 #include "game/Conductor.h"
 
 class FunkinState : public State {
 public:
     FunkinState();
-    virtual ~FunkinState() = default;
+    virtual ~FunkinState();
 
-    virtual void create() override;
-    virtual void update(float elapsed) override;
-    virtual void render() override;
-    virtual void destroy() override;
+    void create() override;
+    void update(float deltaTime) override;
+    void render() override;
+    void destroy() override;
 
-protected:
-    float lastBeat;
-    float lastStep;
-    int curStep;
-    int curBeat;
+    void updateBeat();
+    void updateCurStep();
+    void stepHit();
+    void beatHit();
 
-    virtual void updateBeat();
-    virtual void updateCurStep();
-    virtual void stepHit();
-    virtual void beatHit();
-
-private:
     static const std::string soundExt;
+    int curStep = 0;
+    int curBeat = 0;
+    float lastBeat = 0.0f;
+    float lastStep = 0.0f;
 }; 
