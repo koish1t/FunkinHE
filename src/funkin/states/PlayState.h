@@ -1,10 +1,12 @@
 #pragma once
+
 #include "../../engine/State.h"
 #include "../../engine/Sprite.h"
 #include "../../engine/AnimatedSprite.h"
 #include "../../engine/Input.h"
 #include "../substates/PauseSubState.h"
 #include "../../engine/Log.h"
+#include "../game/Song.h"
 #include "../FunkinState.h"
 
 void playStateKeyboardCallback(unsigned char key, int x, int y);
@@ -20,10 +22,11 @@ public:
     void destroy() override;
 
     void openSubState(SubState* subState);
+    void generateSong(std::string dataPath);
 
-    virtual void keyPressed(unsigned char key, int x, int y) override;
-    virtual void specialKeyPressed(int key, int x, int y) override;
     static PlayState* instance;
+    static SwagSong SONG;
 
 private:
+    std::string curSong;
 };

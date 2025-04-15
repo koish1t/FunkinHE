@@ -12,8 +12,17 @@ Song::Song(const std::string& song, const std::vector<SwagSection>& notes, int b
 
 SwagSong Song::loadFromJson(const std::string& jsonInput, const std::string& folder) {
     std::string path = "assets/data/";
-    if (!folder.empty()) {
-        path += folder + "/";
+    std::string actualFolder = folder;
+    
+    if (actualFolder.ends_with("-easy") || actualFolder.ends_with("-hard")) {
+        size_t dashPos = actualFolder.rfind("-");
+        if (dashPos != std::string::npos) {
+            actualFolder = actualFolder.substr(0, dashPos);
+        }
+    }
+    
+    if (!actualFolder.empty()) {
+        path += actualFolder + "/";
     }
     path += jsonInput + ".json";
 

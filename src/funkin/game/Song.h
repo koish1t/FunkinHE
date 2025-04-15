@@ -7,11 +7,11 @@ struct SwagSong {
     std::string song;
     std::vector<SwagSection> notes;
     int bpm;
-    bool needsVoices;
-    float speed;
-    std::string player1;
-    std::string player2;
-    bool validScore;
+    bool needsVoices = true;
+    float speed = 1.0f;
+    std::string player1 = "bf";
+    std::string player2 = "dad";
+    bool validScore = false;
 };
 
 class Song {

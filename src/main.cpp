@@ -9,7 +9,7 @@
 #include <switch.h>
 #else
 #include <Engine.h>
-#include <states/PlayState.h>
+#include "../funkin/states/PlayState.h"
 #include <Input.h>
 #include <Discord.h>
 #endif

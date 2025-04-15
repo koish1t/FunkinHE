@@ -1,14 +1,14 @@
-#include <states/PlayState.h>
+#include "PlayState.h"
 #include <Engine.h>
 #include <Input.h>
-#include <substates/PauseSubState.h>
 #include <iostream>
 #include "../game/Song.h"
 #include "../game/Conductor.h"
 
 PlayState* PlayState::instance = nullptr;
+SwagSong PlayState::SONG;
 
-PlayState::PlayState() : backgroundSprite(nullptr), playerSprite(nullptr) {
+PlayState::PlayState() {
     instance = this; // haxeflixel reference
 }
 
@@ -19,21 +19,12 @@ PlayState::~PlayState() {
 void PlayState::create() {
     Engine* engine = Engine::getInstance();
 
-    try {
-        SwagSong songData = Song::loadFromJson("bopeebo-hard", "bopeebo");
-        if (!songData.validScore) {
-            throw std::runtime_error("Failed to load song data");
-        }
-        
-        Conductor::changeBPM(songData.bpm);
-        Conductor::mapBPMChanges(songData);
-
-        std::cout << "Loaded song: " << songData.song 
-                  << " BPM: " << songData.bpm 
-                  << " Speed: " << songData.speed << std::endl;
-    } catch (const std::exception& e) {
-        std::cerr << "Error loading song: " << e.what() << std::endl;
+    if (!SONG.validScore) {
+        generateSong("bopeebo-hard");
+        Log::getInstance().info("Song doesn't have a valid score lmao!");
     }
+
+    generateSong(SONG.song);
 }
 
 void PlayState::update(float deltaTime) {
@@ -54,6 +45,24 @@ void PlayState::update(float deltaTime) {
                 Log::getInstance().info("Pause SubState closed");
             }
         }
+    }
+}
+
+void PlayState::generateSong(std::string dataPath) {
+    try {
+        SONG = Song::loadFromJson(dataPath, dataPath);
+        if (!SONG.validScore) {
+            throw std::runtime_error("Failed to load song data");
+        }
+        
+        Conductor::changeBPM(SONG.bpm);
+        curSong = SONG.song;
+
+        std::cout << "Generated song: " << curSong 
+                  << " BPM: " << SONG.bpm 
+                  << " Speed: " << SONG.speed << std::endl;
+    } catch (const std::exception& e) {
+        std::cerr << "Error generating song: " << e.what() << std::endl;
     }
 }
 

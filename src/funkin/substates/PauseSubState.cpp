@@ -5,7 +5,7 @@
 #include "engine/SDLManager.h"
 #include <iostream>
 #else
-#include <substates/PauseSubState.h>
+#include "../funkin/substates/PauseSubState.h"
 #include <Engine.h>
 #include <Input.h>
 #include <SDLManager.h>
