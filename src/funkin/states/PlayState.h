@@ -12,6 +12,12 @@
 #include "../FunkinState.h"
 #include "../../engine/SDLManager.h"
 #include "../../engine/Text.h"
+#include "../../engine/Engine.h"
+#ifdef __MINGW32__ 
+#elif defined(__SWITCH__)
+#else
+#include <Discord.h>
+#endif
 #include <vector>
 #include <array>
 

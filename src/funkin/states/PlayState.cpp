@@ -1,11 +1,8 @@
 #include "PlayState.h"
-#include <Engine.h>
-#include <Input.h>
 #include <iostream>
 #include <algorithm>
 #include "../game/Song.h"
 #include "../game/Conductor.h"
-#include <SDLManager.h>
 
 PlayState* PlayState::instance = nullptr;
 SwagSong PlayState::SONG;
@@ -54,14 +51,24 @@ void PlayState::create() {
     Engine* engine = Engine::getInstance();
 
     if (!SONG.validScore) {
-        generateSong("bopeebo-hard");
+        generateSong("finale-fnf2-hard");
         Log::getInstance().info("Song doesn't have a valid score lmao!");
     }
 
     startCountdown();
-    generateSong(SONG.song);
+    //generateSong(SONG.song);
     generateNotes();
     startingSong = true;
+    #ifdef __SWITCH__
+    // nun
+    #elif defined(__MINGW32__)
+    // nun
+    #else
+    char buffer[256];
+    snprintf(buffer, sizeof(buffer), "In Game - %s", curSong.c_str());
+    Discord::GetInstance().SetState(buffer);
+    Discord::GetInstance().Update();
+    #endif
 }
 
 void PlayState::update(float deltaTime) {
@@ -185,13 +192,25 @@ void PlayState::updateArrowAnimations() {
 
 void PlayState::generateSong(std::string dataPath) {
     try {
-        SONG = Song::loadFromJson(dataPath, dataPath);
+        std::string songName = dataPath;
+        std::string folder = dataPath;
+        std::string baseSongName = dataPath;
+        
+        if (folder.ends_with("-easy") || folder.ends_with("-hard")) {
+            size_t dashPos = folder.rfind("-");
+            if (dashPos != std::string::npos) {
+                folder = folder.substr(0, dashPos);
+                baseSongName = folder;
+            }
+        }
+        
+        SONG = Song::loadFromJson(songName, folder);
         if (!SONG.validScore) {
             throw std::runtime_error("Failed to load song data");
         }
         
         Conductor::changeBPM(SONG.bpm);
-        curSong = SONG.song;
+        curSong = songName;
 
         std::cout << "Generated song: " << curSong 
                   << " BPM: " << SONG.bpm 
@@ -207,7 +226,7 @@ void PlayState::generateSong(std::string dataPath) {
         }
 
         if (SONG.needsVoices) {
-            std::string vocalsPath = "assets/songs/" + curSong + "/Voices" + soundExt;
+            std::string vocalsPath = "assets/songs/" + baseSongName + "/Voices" + soundExt;
             vocals = new Sound();
             if (!vocals->load(vocalsPath)) {
                 Log::getInstance().error("Failed to load vocals: " + vocalsPath);
@@ -216,7 +235,7 @@ void PlayState::generateSong(std::string dataPath) {
             }
         }
 
-        std::string instPath = "assets/songs/" + curSong + "/Inst" + soundExt;
+        std::string instPath = "assets/songs/" + baseSongName + "/Inst" + soundExt;
         inst = new Sound();
         if (!inst->load(instPath)) {
             Log::getInstance().error("Failed to load instrumentals: " + instPath);
@@ -330,27 +349,22 @@ void PlayState::generateNotes() {
     currentSection = 0;
     for (const auto& section : SONG.notes) {
         Log::getInstance().info("Processing section " + std::to_string(currentSection) + 
-                              ", mustHitSection=" + std::to_string(section.mustHitSection) +
-                              ", notes count=" + std::to_string(section.sectionNotes.size()));
+                              ", mustHitSection=" + std::to_string(section.mustHitSection));
 
         for (const auto& noteData : section.sectionNotes) {
             if (noteData.size() >= 2) {
                 float strumTime = noteData[0];
-                int rawNoteType = static_cast<int>(noteData[1]);
-                int noteType = rawNoteType % 4;
+                int noteType = static_cast<int>(noteData[1]);
                 
-                bool mustPress;
-                if (rawNoteType >= 4) {
-                    mustPress = true;
+                bool mustPress = section.mustHitSection;
+                if (noteType >= 4) {
+                    mustPress = !section.mustHitSection;
                     noteType = noteType % 4;
-                } else {
-                    mustPress = section.mustHitSection;
                 }
 
                 Log::getInstance().info("Creating note in section " + std::to_string(currentSection) + 
                                      ": time=" + std::to_string(strumTime) + 
                                      ", type=" + std::to_string(noteType) + 
-                                     ", rawType=" + std::to_string(rawNoteType) +
                                      ", mustPress=" + std::to_string(mustPress));
 
                 bool sustainNote = noteData.size() > 3 && noteData[3] > 0;

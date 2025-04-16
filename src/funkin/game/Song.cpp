@@ -13,6 +13,7 @@ Song::Song(const std::string& song, const std::vector<SwagSection>& notes, int b
 SwagSong Song::loadFromJson(const std::string& jsonInput, const std::string& folder) {
     std::string path = "assets/data/";
     std::string actualFolder = folder;
+    std::string actualJsonInput = jsonInput;
     
     if (actualFolder.ends_with("-easy") || actualFolder.ends_with("-hard")) {
         size_t dashPos = actualFolder.rfind("-");
@@ -21,10 +22,15 @@ SwagSong Song::loadFromJson(const std::string& jsonInput, const std::string& fol
         }
     }
     
+    std::transform(actualFolder.begin(), actualFolder.end(), actualFolder.begin(), ::tolower);
+    std::transform(actualJsonInput.begin(), actualJsonInput.end(), actualJsonInput.begin(), ::tolower);
+    
     if (!actualFolder.empty()) {
         path += actualFolder + "/";
     }
-    path += jsonInput + ".json";
+    path += actualJsonInput + ".json";
+
+    std::cout << "Final path: " << path << std::endl;
 
     std::string rawJson;
     try {
@@ -60,42 +66,47 @@ SwagSong Song::parseJSONshit(const std::string& rawJson) {
         json j = json::parse(rawJson);
         json songData = j["song"];
 
-        swagShit.song = songData["song"].get<std::string>();
-        swagShit.bpm = static_cast<int>(songData["bpm"].get<float>());
-        swagShit.needsVoices = songData["needsVoices"].get<bool>();
-        swagShit.speed = songData["speed"].get<float>();
-        swagShit.player1 = songData["player1"].get<std::string>();
-        swagShit.player2 = songData["player2"].get<std::string>();
+        swagShit.song = songData.value("song", "");
+        swagShit.bpm = static_cast<int>(songData.value("bpm", 100.0f));
+        swagShit.needsVoices = songData.value("needsVoices", true);
+        swagShit.speed = songData.value("speed", 1.0f);
+        swagShit.player1 = songData.value("player1", "bf");
+        swagShit.player2 = songData.value("player2", "dad");
         
-        for (const auto& noteJson : songData["notes"]) {
-            SwagSection section;
-            section.lengthInSteps = noteJson["lengthInSteps"].get<int>();
-            section.mustHitSection = noteJson.value("mustHitSection", true);
-            
-            section.typeOfSection = noteJson.value("typeOfSection", 0);
-            section.bpm = noteJson.value("bpm", 0);
-            section.changeBPM = noteJson.value("changeBPM", false);
-            section.altAnim = noteJson.value("altAnim", false);
-            
-            if (noteJson.contains("sectionNotes")) {
-                for (const auto& noteArray : noteJson["sectionNotes"]) {
-                    std::vector<float> note;
-                    for (const auto& value : noteArray) {
-                        if (value.is_number()) {
-                            note.push_back(value.get<float>());
+        if (songData.contains("notes") && songData["notes"].is_array()) {
+            for (const auto& noteJson : songData["notes"]) {
+                SwagSection section;
+                section.lengthInSteps = noteJson.value("lengthInSteps", 16);
+                section.mustHitSection = noteJson.value("mustHitSection", true);
+                section.typeOfSection = noteJson.value("typeOfSection", 0);
+                section.bpm = noteJson.value("bpm", 0);
+                section.changeBPM = noteJson.value("changeBPM", false);
+                section.altAnim = noteJson.value("altAnim", false);
+                
+                if (noteJson.contains("sectionNotes") && noteJson["sectionNotes"].is_array()) {
+                    for (const auto& noteArray : noteJson["sectionNotes"]) {
+                        if (!noteArray.is_array()) continue;
+                        
+                        std::vector<float> note;
+                        for (const auto& value : noteArray) {
+                            if (value.is_number()) {
+                                note.push_back(value.get<float>());
+                            }
+                        }
+                        if (!note.empty()) {
+                            section.sectionNotes.push_back(note);
                         }
                     }
-                    section.sectionNotes.push_back(note);
                 }
+                
+                swagShit.notes.push_back(section);
             }
-            
-            swagShit.notes.push_back(section);
         }
 
         swagShit.validScore = true;
     } catch (const json::exception& e) {
         std::cerr << "JSON parsing error: " << e.what() << std::endl;
-        return SwagSong(); // Return empty song on error
+        return SwagSong(); // should return empty on error
     }
 
     return swagShit;

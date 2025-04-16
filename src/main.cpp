@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
     #else
     Discord::GetInstance().Initialize("1347011960088035368");    
     Discord::GetInstance().SetState("hamburger engine");
-    Discord::GetInstance().SetDetails("Probably Testing Stuff!");
+    Discord::GetInstance().SetDetails("Playing: Friday Night Funkin' HE by maybekoi");
     Discord::GetInstance().SetLargeImage("hamburger");
     Discord::GetInstance().SetLargeImageText("hamburger engine by YoPhlox & MaybeKoi");
     Discord::GetInstance().SetSmallImage("miku");
