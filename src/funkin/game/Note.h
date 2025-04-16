@@ -22,6 +22,7 @@ public:
 
     static void loadAssets();
     static void unloadAssets();
+    static float getTargetY();
 
     Note(float strumTime, int noteData, Note* prevNote = nullptr, bool sustainNote = false);
     ~Note();

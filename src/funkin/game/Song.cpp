@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <filesystem>
+#include "../engine/Log.h"
 
 using json = nlohmann::json;
 
@@ -10,44 +11,46 @@ Song::Song(const std::string& song, const std::vector<SwagSection>& notes, int b
     : song(song), notes(notes), bpm(bpm) {
 }
 
-SwagSong Song::loadFromJson(const std::string& jsonInput, const std::string& folder) {
-    std::string path = "assets/data/";
+SwagSong Song::loadFromJson(const std::string& songName, const std::string& folder) {
+    SwagSong song;
     std::string actualFolder = folder;
-    std::string actualJsonInput = jsonInput;
     
-    if (actualFolder.ends_with("-easy") || actualFolder.ends_with("-hard")) {
+    bool isEasy = (actualFolder.length() >= 5 && actualFolder.substr(actualFolder.length() - 5) == "-easy");
+    bool isHard = (actualFolder.length() >= 5 && actualFolder.substr(actualFolder.length() - 5) == "-hard");
+    
+    if (isEasy || isHard) {
         size_t dashPos = actualFolder.rfind("-");
         if (dashPos != std::string::npos) {
             actualFolder = actualFolder.substr(0, dashPos);
         }
     }
     
-    std::transform(actualFolder.begin(), actualFolder.end(), actualFolder.begin(), ::tolower);
-    std::transform(actualJsonInput.begin(), actualJsonInput.end(), actualJsonInput.begin(), ::tolower);
+    std::string lowerFolder = actualFolder;
+    std::string lowerSongName = songName;
     
-    if (!actualFolder.empty()) {
-        path += actualFolder + "/";
+    std::transform(lowerFolder.begin(), lowerFolder.end(), lowerFolder.begin(), ::tolower);
+    std::transform(lowerSongName.begin(), lowerSongName.end(), lowerSongName.begin(), ::tolower);
+    
+    std::string path = "assets/data/";
+    if (!lowerFolder.empty()) {
+        path += lowerFolder + "/";
     }
-    path += actualJsonInput + ".json";
+    path += lowerSongName + ".json";
 
     std::cout << "Final path: " << path << std::endl;
 
     std::string rawJson;
-    try {
-        std::ifstream file(path);
-        if (!file.is_open()) {
-            throw std::runtime_error("Could not open file: " + path);
-        }
-        
-        rawJson = std::string(
-            (std::istreambuf_iterator<char>(file)),
-            std::istreambuf_iterator<char>()
-        );
-        file.close();
-    } catch (const std::exception& e) {
-        std::cerr << "Error loading song file: " << e.what() << std::endl;
-        return SwagSong(); // should return empty on error
+    std::ifstream file(path);
+    if (!file.is_open()) {
+        Log::getInstance().error("Could not open file: " + path);
+        return SwagSong();
     }
+    
+    rawJson = std::string(
+        (std::istreambuf_iterator<char>(file)),
+        std::istreambuf_iterator<char>()
+    );
+    file.close();
 
     while (!rawJson.empty() && std::isspace(rawJson.back())) {
         rawJson.pop_back();
@@ -104,9 +107,9 @@ SwagSong Song::parseJSONshit(const std::string& rawJson) {
         }
 
         swagShit.validScore = true;
-    } catch (const json::exception& e) {
-        std::cerr << "JSON parsing error: " << e.what() << std::endl;
-        return SwagSong(); // should return empty on error
+    } catch (const json::exception& ex) {
+        Log::getInstance().error("JSON parsing error: " + std::string(ex.what()));
+        return SwagSong();
     }
 
     return swagShit;

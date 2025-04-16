@@ -9,6 +9,7 @@
 #include "../../engine/Log.h"
 #include "../game/Song.h"
 #include "../game/Note.h"
+#include "../game/GameConfig.h"
 #include "../FunkinState.h"
 #include "../../engine/SDLManager.h"
 #include "../../engine/Text.h"
@@ -20,8 +21,20 @@
 #endif
 #include <vector>
 #include <array>
+#include <string>
+#include <map>
 
 void playStateKeyboardCallback(unsigned char key, int x, int y);
+
+struct KeyBinding {
+    SDL_Scancode primary;
+    SDL_Scancode alternate;
+};
+
+struct NXBinding {
+    SDL_GameControllerButton primary;
+    SDL_GameControllerButton alternate;
+};
 
 class PlayState : public FunkinState {
 public:
@@ -64,31 +77,42 @@ private:
     const std::vector<std::string> NOTE_STYLES = {"arrow", "arrow", "arrow", "arrow"};
     const std::vector<std::string> NOTE_DIRS = {"LEFT", "DOWN", "UP", "RIGHT"};
     
-    struct KeyBinding {
-        SDL_Scancode primary;
-        SDL_Scancode alternate;
-    };
-    
-    const std::array<KeyBinding, 4> ARROW_KEYS = {{
-        {SDL_SCANCODE_LEFT, SDL_SCANCODE_A},
-        {SDL_SCANCODE_DOWN, SDL_SCANCODE_S},
-        {SDL_SCANCODE_UP, SDL_SCANCODE_W},
-        {SDL_SCANCODE_RIGHT, SDL_SCANCODE_D}
-    }};
+    std::array<KeyBinding, 4> arrowKeys;
+    std::array<NXBinding, 4> nxArrowKeys;
+
+    void loadKeybinds();
+    void loadSongConfig();
+    SDL_Scancode getScancodeFromString(const std::string& keyName);
+    SDL_GameControllerButton getButtonFromString(const std::string& buttonName);
 
     bool isKeyPressed(int keyIndex) const {
-        const auto& binding = ARROW_KEYS[keyIndex];
+        const auto& binding = arrowKeys[keyIndex];
         return Input::pressed(binding.primary) || Input::pressed(binding.alternate);
     }
 
     bool isKeyJustPressed(int keyIndex) const {
-        const auto& binding = ARROW_KEYS[keyIndex];
+        const auto& binding = arrowKeys[keyIndex];
         return Input::justPressed(binding.primary) || Input::justPressed(binding.alternate);
     }
 
     bool isKeyJustReleased(int keyIndex) const {
-        const auto& binding = ARROW_KEYS[keyIndex];
+        const auto& binding = arrowKeys[keyIndex];
         return Input::justReleased(binding.primary) || Input::justReleased(binding.alternate);
+    }
+
+    bool isNXButtonPressed(int keyIndex) const {
+        const auto& binding = nxArrowKeys[keyIndex];
+        return Input::isControllerButtonPressed(binding.primary) || Input::isControllerButtonPressed(binding.alternate);
+    }
+
+    bool isNXButtonJustPressed(int keyIndex) const {
+        const auto& binding = nxArrowKeys[keyIndex];
+        return Input::isControllerButtonJustPressed(binding.primary) || Input::isControllerButtonJustPressed(binding.alternate);
+    }
+
+    bool isNXButtonJustReleased(int keyIndex) const {
+        const auto& binding = nxArrowKeys[keyIndex];
+        return Input::isControllerButtonJustReleased(binding.primary) || Input::isControllerButtonJustReleased(binding.alternate);
     }
 
     void handleInput();

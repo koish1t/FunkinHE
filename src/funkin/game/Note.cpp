@@ -170,19 +170,27 @@ void Note::setupSustainNote() {
     }
 }
 
+float Note::getTargetY() {
+    int windowHeight = Engine::getInstance()->getWindowHeight();
+    if (GameConfig::getInstance()->isDownscroll()) {
+        return windowHeight - 150.0f;
+    }
+    return 50.0f;
+}
+
 void Note::update(float deltaTime) {
     AnimatedSprite::update(deltaTime);
 
     float songPos = Conductor::songPosition;
     float scrollSpeed = PlayState::SONG.speed;
     
-    float targetY = 50.0f;
+    float targetY = getTargetY();
     
     float timeDiff = strumTime - songPos;
     float distance = timeDiff * 0.45f * scrollSpeed;
     
     float x = getX();
-    float y = targetY + distance;
+    float y = targetY + (GameConfig::getInstance()->isDownscroll() ? -distance : distance);
     
     setPosition(x, y);
     setVisible(true);

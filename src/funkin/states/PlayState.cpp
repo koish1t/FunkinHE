@@ -3,6 +3,15 @@
 #include <algorithm>
 #include "../game/Song.h"
 #include "../game/Conductor.h"
+#include <fstream>
+#include <map>
+#ifdef __SWITCH__ 
+#include "../backend/json.hpp"
+#elif defined(__MINGW32__)
+#include "../backend/json.hpp"
+#else
+#include "../backend/json.hpp"
+#endif
 
 PlayState* PlayState::instance = nullptr;
 SwagSong PlayState::SONG;
@@ -20,6 +29,8 @@ PlayState::PlayState() {
     int windowHeight = Engine::getInstance()->getWindowHeight();
     scoreText->setPosition(windowWidth / 2 - 100, windowHeight - 50);
     updateScoreText();
+
+    loadKeybinds();
 }
 
 PlayState::~PlayState() {
@@ -47,16 +58,37 @@ PlayState::~PlayState() {
     destroy();
 }
 
+void PlayState::loadSongConfig() {
+    std::ifstream configFile("assets/data/config.json");
+    if (!configFile.is_open()) {
+        Log::getInstance().error("Failed to open config.json");
+        return;
+    }
+
+    try {
+        nlohmann::json config;
+        configFile >> config;
+
+        if (config.contains("songConfig")) {
+            auto songConfig = config["songConfig"];
+            std::string songName = songConfig["songName"].get<std::string>();
+            std::string difficulty = songConfig["difficulty"].get<std::string>();
+            
+            std::string fullSongName = difficulty.empty() ? songName : songName + "-" + difficulty;
+            generateSong(fullSongName);
+        } else {
+            Log::getInstance().error("No songConfig found in config.json");
+        }
+    } catch (const std::exception& ex) {
+        Log::getInstance().error("Failed to parse song config: " + std::string(ex.what()));
+    }
+}
+
 void PlayState::create() {
     Engine* engine = Engine::getInstance();
 
-    if (!SONG.validScore) {
-        generateSong("finale-fnf2-hard");
-        Log::getInstance().info("Song doesn't have a valid score lmao!");
-    }
-
+    loadSongConfig();
     startCountdown();
-    //generateSong(SONG.song);
     generateNotes();
     startingSong = true;
     #ifdef __SWITCH__
@@ -152,15 +184,15 @@ void PlayState::update(float deltaTime) {
 }
 
 void PlayState::handleInput() {
-    for (int i = 0; i < 4; i++) {
-        int arrowIndex = i + 4;
+    for (size_t i = 0; i < 4; i++) {
+        size_t arrowIndex = i + 4;
         if (arrowIndex < strumLineNotes.size() && strumLineNotes[arrowIndex]) {
-            if (isKeyJustPressed(i)) {
+            if (isKeyJustPressed(static_cast<int>(i)) || isNXButtonJustPressed(static_cast<int>(i))) {
                 strumLineNotes[arrowIndex]->playAnimation("pressed");
                 
                 bool noteHit = false;
                 for (auto note : notes) {
-                    if (note && note->mustPress && !note->wasGoodHit && note->noteData == i && note->canBeHit) {
+                    if (note && note->mustPress && !note->wasGoodHit && note->noteData == static_cast<int>(i) && note->canBeHit) {
                         goodNoteHit(note);
                         noteHit = true;
                         break;
@@ -168,10 +200,14 @@ void PlayState::handleInput() {
                 }
                 
                 if (!noteHit) {
-                    noteMiss(i);
+                    if (GameConfig::getInstance()->isGhostTapping()) {
+                        // do nun lol
+                    } else {
+                        noteMiss(static_cast<int>(i));
+                    }
                 }
             }
-            else if (isKeyJustReleased(i)) {
+            else if (isKeyJustReleased(static_cast<int>(i)) || isNXButtonJustReleased(static_cast<int>(i))) {
                 strumLineNotes[arrowIndex]->playAnimation("static");
             }
         }
@@ -196,7 +232,8 @@ void PlayState::generateSong(std::string dataPath) {
         std::string folder = dataPath;
         std::string baseSongName = dataPath;
         
-        if (folder.ends_with("-easy") || folder.ends_with("-hard")) {
+        if (folder.length() >= 5 && folder.substr(folder.length() - 5) == "-easy" ||
+            folder.length() >= 5 && folder.substr(folder.length() - 5) == "-hard") {
             size_t dashPos = folder.rfind("-");
             if (dashPos != std::string::npos) {
                 folder = folder.substr(0, dashPos);
@@ -206,7 +243,8 @@ void PlayState::generateSong(std::string dataPath) {
         
         SONG = Song::loadFromJson(songName, folder);
         if (!SONG.validScore) {
-            throw std::runtime_error("Failed to load song data");
+            Log::getInstance().error("Failed to load song data");
+            return;
         }
         
         Conductor::changeBPM(SONG.bpm);
@@ -243,8 +281,9 @@ void PlayState::generateSong(std::string dataPath) {
             inst = nullptr;
         }
         
-    } catch (const std::exception& e) {
-        std::cerr << "Error generating song: " << e.what() << std::endl;
+    } catch (const std::exception& ex) {
+        std::cerr << "Error generating song: " << ex.what() << std::endl;
+        Log::getInstance().error("Error generating song: " + std::string(ex.what()));
     }
 }
 
@@ -296,7 +335,7 @@ void PlayState::generateStaticArrows(int player) {
     SDL_GetWindowSize(SDLManager::getInstance().getWindow(), &windowWidth, &windowHeight);
     
     float startX = (player == 1) ? (windowWidth * 0.75f) : (windowWidth * 0.25f);
-    float yPos = 50.0f;
+    float yPos = GameConfig::getInstance()->isDownscroll() ? (windowHeight - 150.0f) : 50.0f;
     
     float arrowSpacing = 120.0f;
     float totalWidth = arrowSpacing * 3;
@@ -455,4 +494,135 @@ void PlayState::noteMiss(int direction) {
     score -= 10;
     if (score < 0) score = 0;
     updateScoreText();
+}
+
+void PlayState::loadKeybinds() {
+    std::ifstream configFile("assets/data/config.json");
+    if (!configFile.is_open()) {
+        Log::getInstance().error("Failed to open config.json");
+        return;
+    }
+
+    nlohmann::json config;
+    try {
+        configFile >> config;
+    } catch (const std::exception& ex) {
+        Log::getInstance().error("Failed to parse config.json: " + std::string(ex.what()));
+        return;
+    }
+
+    if (config.contains("mainBinds")) {
+        auto mainBinds = config["mainBinds"];
+        arrowKeys[0].primary = getScancodeFromString(mainBinds["left"].get<std::string>());
+        arrowKeys[1].primary = getScancodeFromString(mainBinds["down"].get<std::string>());
+        arrowKeys[2].primary = getScancodeFromString(mainBinds["up"].get<std::string>());
+        arrowKeys[3].primary = getScancodeFromString(mainBinds["right"].get<std::string>());
+    }
+
+    if (config.contains("altBinds")) {
+        auto altBinds = config["altBinds"];
+        arrowKeys[0].alternate = getScancodeFromString(altBinds["left"].get<std::string>());
+        arrowKeys[1].alternate = getScancodeFromString(altBinds["down"].get<std::string>());
+        arrowKeys[2].alternate = getScancodeFromString(altBinds["up"].get<std::string>());
+        arrowKeys[3].alternate = getScancodeFromString(altBinds["right"].get<std::string>());
+    }
+
+    if (config.contains("nxBinds")) {
+        auto nxBinds = config["nxBinds"];
+        nxArrowKeys[0].primary = getButtonFromString(nxBinds["left"].get<std::string>());
+        nxArrowKeys[1].primary = getButtonFromString(nxBinds["down"].get<std::string>());
+        nxArrowKeys[2].primary = getButtonFromString(nxBinds["up"].get<std::string>());
+        nxArrowKeys[3].primary = getButtonFromString(nxBinds["right"].get<std::string>());
+    }
+
+    if (config.contains("nxAltBinds")) {
+        auto nxAltBinds = config["nxAltBinds"];
+        nxArrowKeys[0].alternate = getButtonFromString(nxAltBinds["left"].get<std::string>());
+        nxArrowKeys[1].alternate = getButtonFromString(nxAltBinds["down"].get<std::string>());
+        nxArrowKeys[2].alternate = getButtonFromString(nxAltBinds["up"].get<std::string>());
+        nxArrowKeys[3].alternate = getButtonFromString(nxAltBinds["right"].get<std::string>());
+    }
+}
+
+SDL_Scancode PlayState::getScancodeFromString(const std::string& keyName) {
+    static const std::map<std::string, SDL_Scancode> keyMap = {
+        {"A", SDL_SCANCODE_A},
+        {"B", SDL_SCANCODE_B},
+        {"C", SDL_SCANCODE_C},
+        {"D", SDL_SCANCODE_D},
+        {"E", SDL_SCANCODE_E},
+        {"F", SDL_SCANCODE_F},
+        {"G", SDL_SCANCODE_G},
+        {"H", SDL_SCANCODE_H},
+        {"I", SDL_SCANCODE_I},
+        {"J", SDL_SCANCODE_J},
+        {"K", SDL_SCANCODE_K},
+        {"L", SDL_SCANCODE_L},
+        {"M", SDL_SCANCODE_M},
+        {"N", SDL_SCANCODE_N},
+        {"O", SDL_SCANCODE_O},
+        {"P", SDL_SCANCODE_P},
+        {"Q", SDL_SCANCODE_Q},
+        {"R", SDL_SCANCODE_R},
+        {"S", SDL_SCANCODE_S},
+        {"T", SDL_SCANCODE_T},
+        {"U", SDL_SCANCODE_U},
+        {"V", SDL_SCANCODE_V},
+        {"W", SDL_SCANCODE_W},
+        {"X", SDL_SCANCODE_X},
+        {"Y", SDL_SCANCODE_Y},
+        {"Z", SDL_SCANCODE_Z},
+        {"ArrowLeft", SDL_SCANCODE_LEFT},
+        {"ArrowRight", SDL_SCANCODE_RIGHT},
+        {"ArrowUp", SDL_SCANCODE_UP},
+        {"ArrowDown", SDL_SCANCODE_DOWN},
+        {"Space", SDL_SCANCODE_SPACE},
+        {"Enter", SDL_SCANCODE_RETURN},
+        {"Escape", SDL_SCANCODE_ESCAPE},
+        {"Left", SDL_SCANCODE_LEFT},
+        {"Right", SDL_SCANCODE_RIGHT},
+        {"Up", SDL_SCANCODE_UP},
+        {"Down", SDL_SCANCODE_DOWN}
+    };
+
+    auto it = keyMap.find(keyName);
+    if (it != keyMap.end()) {
+        return it->second;
+    }
+
+    Log::getInstance().warning("Unknown key name: " + keyName);
+    return SDL_SCANCODE_UNKNOWN;
+}
+
+SDL_GameControllerButton PlayState::getButtonFromString(const std::string& buttonName) {
+    static const std::map<std::string, SDL_GameControllerButton> buttonMap = {
+        {"A", SDL_CONTROLLER_BUTTON_A},
+        {"B", SDL_CONTROLLER_BUTTON_B},
+        {"X", SDL_CONTROLLER_BUTTON_X},
+        {"Y", SDL_CONTROLLER_BUTTON_Y},
+        {"DPAD_LEFT", SDL_CONTROLLER_BUTTON_DPAD_LEFT},
+        {"DPAD_RIGHT", SDL_CONTROLLER_BUTTON_DPAD_RIGHT},
+        {"DPAD_UP", SDL_CONTROLLER_BUTTON_DPAD_UP},
+        {"DPAD_DOWN", SDL_CONTROLLER_BUTTON_DPAD_DOWN},
+        {"LEFT_SHOULDER", SDL_CONTROLLER_BUTTON_LEFTSHOULDER},
+        {"RIGHT_SHOULDER", SDL_CONTROLLER_BUTTON_RIGHTSHOULDER},
+        {"LEFT_TRIGGER", SDL_CONTROLLER_BUTTON_LEFTSHOULDER},
+        {"RIGHT_TRIGGER", SDL_CONTROLLER_BUTTON_RIGHTSHOULDER},
+        {"ZL", SDL_CONTROLLER_BUTTON_LEFTSHOULDER},
+        {"ZR", SDL_CONTROLLER_BUTTON_RIGHTSHOULDER},
+        {"LT", SDL_CONTROLLER_BUTTON_LEFTSHOULDER},
+        {"RT", SDL_CONTROLLER_BUTTON_RIGHTSHOULDER},
+        {"LEFT_STICK", SDL_CONTROLLER_BUTTON_LEFTSTICK},
+        {"RIGHT_STICK", SDL_CONTROLLER_BUTTON_RIGHTSTICK},
+        {"START", SDL_CONTROLLER_BUTTON_START},
+        {"BACK", SDL_CONTROLLER_BUTTON_BACK}
+    };
+
+    auto it = buttonMap.find(buttonName);
+    if (it != buttonMap.end()) {
+        return it->second;
+    }
+
+    Log::getInstance().warning("Unknown button name: " + buttonName);
+    return SDL_CONTROLLER_BUTTON_INVALID;
 }
