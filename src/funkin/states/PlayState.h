@@ -82,6 +82,7 @@ private:
 
     void loadKeybinds();
     void loadSongConfig();
+    void handleOpponentNoteHit(float deltaTime);
     SDL_Scancode getScancodeFromString(const std::string& keyName);
     SDL_GameControllerButton getButtonFromString(const std::string& buttonName);
 

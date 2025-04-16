@@ -114,6 +114,7 @@ void PlayState::update(float deltaTime) {
         Input::UpdateControllerStates();
 
         handleInput();
+        handleOpponentNoteHit(deltaTime);
         updateArrowAnimations();
 
         for (auto arrow : strumLineNotes) {
@@ -625,4 +626,42 @@ SDL_GameControllerButton PlayState::getButtonFromString(const std::string& butto
 
     Log::getInstance().warning("Unknown button name: " + buttonName);
     return SDL_CONTROLLER_BUTTON_INVALID;
+}
+
+void PlayState::handleOpponentNoteHit(float deltaTime) {
+    static float animationTimer = 0.0f;
+    static bool isAnimating = false;
+    static int currentArrowIndex = -1;
+
+    for (auto note : notes) {
+        if (note && !note->mustPress && !note->wasGoodHit) {
+            float timeDiff = note->strumTime - Conductor::songPosition;
+            
+            if (timeDiff <= 45.0f && timeDiff >= -Conductor::safeZoneOffset) {
+                note->canBeHit = true;
+                
+                int arrowIndex = note->noteData;
+                if (arrowIndex < strumLineNotes.size() && strumLineNotes[arrowIndex]) {
+                    strumLineNotes[arrowIndex]->playAnimation("confirm");
+                    isAnimating = true;
+                    currentArrowIndex = arrowIndex;
+                    animationTimer = 0.0f;
+                }
+                
+                note->wasGoodHit = true;
+                note->kill = true;
+            }
+        }
+    }
+
+    if (isAnimating) {
+        animationTimer += deltaTime;
+        if (animationTimer >= 0.1f) {
+            if (currentArrowIndex >= 0 && currentArrowIndex < strumLineNotes.size() && strumLineNotes[currentArrowIndex]) {
+                strumLineNotes[currentArrowIndex]->playAnimation("static");
+            }
+            isAnimating = false;
+            currentArrowIndex = -1;
+        }
+    }
 }
