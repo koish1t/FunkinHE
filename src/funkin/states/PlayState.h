@@ -46,6 +46,7 @@ public:
     int combo = 0;
     int score = 0;
     int misses = 0;
+    Sound* getVocals() const { return vocals; }
 
 private:
     std::string curSong;
@@ -88,4 +89,5 @@ private:
     void updateArrowAnimations();
     Text* scoreText;
     void updateScoreText();
+    float pauseCooldown = 0.0f;
 };

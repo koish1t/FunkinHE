@@ -124,11 +124,18 @@ void PlayState::update(float deltaTime) {
             }
         }
 
+        if (pauseCooldown > 0) {
+            pauseCooldown -= deltaTime;
+        }
+
         if (Input::justPressed(SDL_SCANCODE_RETURN) || Input::isControllerButtonJustPressed(SDL_CONTROLLER_BUTTON_START)) {
             if (_subStates.empty()) {
-                PauseSubState* pauseSubState = new PauseSubState();
-                openSubState(pauseSubState);
-                Log::getInstance().info("Pause SubState opened");
+                if (pauseCooldown <= 0) {
+                    PauseSubState* pauseSubState = new PauseSubState();
+                    openSubState(pauseSubState);
+                    Log::getInstance().info("Pause SubState opened");
+                    pauseCooldown = 0.5f;
+                }
             } else {
                 closeSubState();
                 Log::getInstance().info("Pause SubState closed");
@@ -240,28 +247,28 @@ void PlayState::startCountdown() {
 }
 
 void PlayState::render() {
+    for (auto arrow : strumLineNotes) {
+        if (arrow && arrow->isVisible()) {
+            arrow->render();
+        }
+    }
+
+    for (auto note : notes) {
+        if (note && note->isVisible()) {
+            note->render();
+        }
+    }
+
+    scoreText->render();
+
+    static int lastNoteCount = 0;
+    if (notes.size() != lastNoteCount) {
+        Log::getInstance().info("Active notes: " + std::to_string(notes.size()));
+        lastNoteCount = notes.size();
+    }
+
     if (!_subStates.empty()) {
         _subStates.back()->render();
-    } else {
-        for (auto arrow : strumLineNotes) {
-            if (arrow && arrow->isVisible()) {
-                arrow->render();
-            }
-        }
-
-        for (auto note : notes) {
-            if (note && note->isVisible()) {
-                note->render();
-            }
-        }
-
-        scoreText->render();
-
-        static int lastNoteCount = 0;
-        if (notes.size() != lastNoteCount) {
-            Log::getInstance().info("Active notes: " + std::to_string(notes.size()));
-            lastNoteCount = notes.size();
-        }
     }
 }
 
