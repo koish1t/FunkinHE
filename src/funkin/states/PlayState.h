@@ -1,23 +1,23 @@
 #pragma once
 
-#include "../../engine/State.h"
-#include "../../engine/Sprite.h"
-#include "../../engine/AnimatedSprite.h"
-#include "../../engine/Input.h"
-#include "../../engine/Sound.h"
+#include "../../engine/core/State.h"
+#include "../../engine/graphics/Sprite.h"
+#include "../../engine/graphics/AnimatedSprite.h"
+#include "../../engine/input/Input.h"
+#include "../../engine/audio/Sound.h"
 #include "../substates/PauseSubState.h"
-#include "../../engine/Log.h"
+#include "../../engine/utils/Log.h"
 #include "../game/Song.h"
 #include "../game/Note.h"
 #include "../game/GameConfig.h"
 #include "../FunkinState.h"
-#include "../../engine/SDLManager.h"
-#include "../../engine/Text.h"
-#include "../../engine/Engine.h"
+#include "../../engine/core/SDLManager.h"
+#include "../../engine/graphics/Text.h"
+#include "../../engine/core/Engine.h"
 #ifdef __MINGW32__ 
 #elif defined(__SWITCH__)
 #else
-#include <Discord.h>
+#include <utils/Discord.h>
 #endif
 #include <vector>
 #include <array>

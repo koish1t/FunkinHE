@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../engine/AnimatedSprite.h"
+#include "../../engine/graphics/AnimatedSprite.h"
 #include <map>
 #include <string>
 

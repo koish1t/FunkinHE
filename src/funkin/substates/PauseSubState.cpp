@@ -1,17 +1,17 @@
 #ifdef __MINGW32__ || defined(__SWITCH__)
 #include "funkin/substates/PauseSubState.h"
-#include "engine/Engine.h"
-#include "engine/Input.h"
-#include "engine/SDLManager.h"
-#include "engine/SoundManager.h"
+#include "engine/core/Engine.h"
+#include "engine/input/Input.h"
+#include "engine/core/SDLManager.h"
+#include "engine/audio/SoundManager.h"
 #include "funkin/states/PlayState.h"
 #include <iostream>
 #else
 #include "../funkin/substates/PauseSubState.h"
-#include <Engine.h>
-#include <Input.h>
-#include <SDLManager.h>
-#include <SoundManager.h>
+#include <core/Engine.h>
+#include <input/Input.h>
+#include <core/SDLManager.h>
+#include <audio/SoundManager.h>
 #include "../funkin/states/PlayState.h"
 #include <iostream>
 #endif

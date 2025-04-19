@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../engine/State.h"
-#include "../engine/Sound.h"
+#include "../engine/core/State.h"
+#include "../engine/audio/Sound.h"
 #include "game/Conductor.h"
 
 class FunkinState : public State {
