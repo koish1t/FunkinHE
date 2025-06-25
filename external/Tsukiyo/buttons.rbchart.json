@@ -1,0 +1,262 @@
+{
+    "song": {
+        "title": "Buttons",
+        "artist": "AD1340",
+        "charter": "AD1340",
+        "bpm": 147,
+        "difficulties": ["normal", "hard"]
+    },
+    "charts": {
+        "normal": [
+            {
+                "beat": 1,
+                "button": 1
+            },
+            {
+                "beat": 3,
+                "button": 2
+            },
+            {
+                "beat": 5,
+                "button": 3
+            },
+            {
+                "beat": 7,
+                "button": 4
+            },
+            {
+                "beat": 9,
+                "button": 5
+            },
+            {
+                "beat": 11,
+                "button": 6
+            },
+            {
+                "beat": 13,
+                "button": 2
+            },
+            {
+                "beat": 15,
+                "button": 2
+            },
+            {
+                "beat": 17,
+                "button": 3
+            },
+            {
+                "beat": 19,
+                "button": 3
+            },
+            {
+                "beat": 21,
+                "button": 2
+            },
+            {
+                "beat": 23,
+                "button": 2
+            },
+            {
+                "beat": 25,
+                "button": 1
+            },
+            {
+                "beat": 27,
+                "button": 1
+            },
+            {
+                "beat": 29,
+                "button": 5
+            },
+            {
+                "beat": 31,
+                "button": 5
+            },
+            {
+                "beat": 32,
+                "button": 6
+            },
+            {
+                "beat": 33,
+                "button": 4
+            },
+            {
+                "beat": 34,
+                "button": 2
+            },
+            {
+                "beat": 35,
+                "button": 5
+            },
+            {
+                "beat": 36,
+                "button": 6
+            },
+            {
+                "beat": 37,
+                "button": 4
+            },
+            {
+                "beat": 38,
+                "button": 2
+            },
+            {
+                "beat": 39,
+                "button": 5
+            },
+            {
+                "beat": 40,
+                "button": 1
+            },
+            {
+                "beat": 41,
+                "button": 5
+            },
+            {
+                "beat": 42,
+                "button": 2
+            },
+            {
+                "beat": 43,
+                "button": 6
+            },
+            {
+                "beat": 44,
+                "button": 2
+            },
+            {
+                "beat": 45,
+                "button": 6
+            },
+            {
+                "beat": 46,
+                "button": 5
+            },
+            {
+                "beat": 47,
+                "button": 1
+            },
+            {
+                "beat": 48,
+                "button": 6
+            },
+            {
+                "beat": 49,
+                "button": 4
+            },
+            {
+                "beat": 50,
+                "button": 2
+            },
+            {
+                "beat": 51,
+                "button": 5
+            },
+            {
+                "beat": 52,
+                "button": 6
+            },
+            {
+                "beat": 53,
+                "button": 4
+            },
+            {
+                "beat": 54,
+                "button": 2
+            },
+            {
+                "beat": 55,
+                "button": 5
+            },
+            {
+                "beat": 56,
+                "button": 1
+            },
+            {
+                "beat": 57,
+                "button": 5
+            },
+            {
+                "beat": 58,
+                "button": 2
+            },
+            {
+                "beat": 59,
+                "button": 6
+            },
+            {
+                "beat": 60,
+                "button": 2
+            },
+            {
+                "beat": 61,
+                "button": 6
+            },
+            {
+                "beat": 62,
+                "button": 5
+            },
+            {
+                "beat": 63,
+                "button": 1
+            },
+            {
+                "beat": 65,
+                "button": 1
+            },
+            {
+                "beat": 67,
+                "button": 2
+            },
+            {
+                "beat": 69,
+                "button": 3
+            },
+            {
+                "beat": 71,
+                "button": 4
+            },
+            {
+                "beat": 73,
+                "button": 5
+            },
+            {
+                "beat": 75,
+                "button": 6
+            },
+            {
+                "beat": 77,
+                "button": 2
+            },
+            {
+                "beat": 79,
+                "button": 2
+            },
+            {
+                "beat": 81,
+                "button": 3
+            },
+            {
+                "beat": 83,
+                "button": 3
+            },
+            {
+                "beat": 85,
+                "button": 2
+            },
+            {
+                "beat": 87,
+                "button": 2
+            },
+            {
+                "beat": 89,
+                "button": 1
+            },
+            {
+                "beat": 91,
+                "button": 1
+            }
+        ],
+        "hard": []
+    }
+}

@@ -2,3 +2,4 @@
 /gameName
 stb_image_impl.cpp
 *.hx
+/platforms/VisualC/.vs

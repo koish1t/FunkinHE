@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\thirdparty">
+      <UniqueIdentifier>{08ff3997-f229-46b3-ba8e-243a11e5a137}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\hamburger-engine">
+      <UniqueIdentifier>{f977e224-077a-4df3-989a-ca0289e4ebb2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\funkin">
+      <UniqueIdentifier>{5abff412-4af6-4f07-a4f3-604bbe42cca8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\funkin\game">
+      <UniqueIdentifier>{4e0f3532-ec0f-4f41-b03a-a191b4d95510}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\funkin\states">
+      <UniqueIdentifier>{7d6cb984-d8aa-459f-b78a-8ae4e4496552}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\funkin\substates">
+      <UniqueIdentifier>{875805d4-f454-4c62-bd5c-e0f562c154fa}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\thirdparty\stb_image_impl.cpp">
+      <Filter>Source Files\thirdparty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\audio\Sound.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\audio\SoundManager.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\core\Engine.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\core\SDLManager.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\core\State.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\debug\DebugUI.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\AnimatedSprite.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Button.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Camera.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Sprite.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\Text.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\graphics\VideoPlayer.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\input\Input.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\utils\Discord.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\utils\Log.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\engine\utils\Paths.cpp">
+      <Filter>Source Files\hamburger-engine</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\funkin\FunkinState.cpp">
+      <Filter>Source Files\funkin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\funkin\game\Conductor.cpp">
+      <Filter>Source Files\funkin\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\funkin\game\GameConfig.cpp">
+      <Filter>Source Files\funkin\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\funkin\game\Note.cpp">
+      <Filter>Source Files\funkin\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\funkin\game\Section.cpp">
+      <Filter>Source Files\funkin\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\funkin\game\Song.cpp">
+      <Filter>Source Files\funkin\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\funkin\states\PlayState.cpp">
+      <Filter>Source Files\funkin\states</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\funkin\substates\PauseSubState.cpp">
+      <Filter>Source Files\funkin\substates</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
