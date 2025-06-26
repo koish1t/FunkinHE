@@ -18,10 +18,15 @@ public:
     Sound* loadSound(const std::string& path);
     void playSound(const std::string& path, float volume = 1.0f);
 
+    float getMusicPosition();
+    void updateMusicPosition(float deltaTime);
+    float musicPosition = 0.0f;
+
 private:
     SoundManager();
     ~SoundManager();
     
     std::map<std::string, Sound*> sounds;
     Mix_Music* currentMusic;
+    Uint32 lastMusicTick = 0;
 }; 
