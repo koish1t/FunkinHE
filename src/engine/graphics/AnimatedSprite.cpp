@@ -38,7 +38,7 @@ void AnimatedSprite::update(float deltaTime) {
 
 void AnimatedSprite::render() {
     if (!visible || !currentAnimation || currentAnimation->frames.empty()) {
-        if (!currentAnimation) Log::getInstance().error("No current animation");
+        //if (!currentAnimation) Log::getInstance().error("No current animation");
         if (currentAnimation && currentAnimation->frames.empty()) Log::getInstance().error("No frames in animation");
         return;
     }

@@ -17,7 +17,7 @@ public:
     void updateBeat();
     void updateCurStep();
     void stepHit();
-    void beatHit();
+    virtual void beatHit();
 
     static const std::string soundExt;
     int curStep = 0;

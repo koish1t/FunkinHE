@@ -31,6 +31,9 @@
     <Filter Include="Source Files\funkin\substates">
       <UniqueIdentifier>{875805d4-f454-4c62-bd5c-e0f562c154fa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\funkin\backend">
+      <UniqueIdentifier>{78404b7b-d4c1-41d5-9215-879f862b7fc2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\main.cpp">
@@ -110,6 +113,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\funkin\substates\PauseSubState.cpp">
       <Filter>Source Files\funkin\substates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\funkin\game\Alphabet.cpp">
+      <Filter>Source Files\funkin\game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\funkin\states\TitleState.cpp">
+      <Filter>Source Files\funkin\states</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
