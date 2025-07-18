@@ -139,14 +139,26 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\src\engine;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\discord-rpc\include;$(ProjectDir)..\..\external\ffmpeg\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\src\engine;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\discord-rpc\include;$(ProjectDir)..\..\external\vlc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\external\lib\x64;$(ProjectDir)..\..\external\ffmpeg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);discord-rpc.lib;libcurl.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;SDL2main.lib;SDL2test.lib;avcodec.lib;SDL2_gfx.lib;avdevice.lib;avfilter.lib;avformat.lib;avutil.lib;postproc.lib;swresample.lib;swscale.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\external\lib\x64;$(ProjectDir)..\..\external\vlc\lib\Windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);discord-rpc.lib;libcurl.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;SDL2main.lib;SDL2test.lib;SDL2_gfx.lib;libvlc.lib;libvlccore.lib</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>XCOPY "$(SolutionDir)..\..\assets" "$(TargetDir)\assets\" /E /Y
+
+XCOPY "$(ProjectDir)..\..\external\discord-rpc\dll\x64\*.*" "$(TargetDir)" /Y
+
+xcopy /Y "$(ProjectDir)..\..\external\vlc\lib\Windows\*.dll" "$(OutDir)"
+
+xcopy /Y "$(ProjectDir)..\..\external\dll\*.dll" "$(OutDir)"
+
+XCOPY "$(ProjectDir)..\..\external\vlc\plugins" "$(TargetDir)\plugins\" /E /Y</Command>
+      <Message>copies shit</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -157,20 +169,34 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\src\engine;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\discord-rpc\include;$(ProjectDir)..\..\external\ffmpeg\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\src\engine;$(ProjectDir)..\..\external;$(ProjectDir)..\..\external\discord-rpc\include;$(ProjectDir)..\..\external\vlc\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\..\external\lib\x64;$(ProjectDir)..\..\external\ffmpeg\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>%(AdditionalDependencies);discord-rpc.lib;libcurl.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;SDL2main.lib;SDL2test.lib;avcodec.lib;SDL2_gfx.lib;avdevice.lib;avfilter.lib;avformat.lib;avutil.lib;postproc.lib;swresample.lib;swscale.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)..\..\external\lib\x64;$(ProjectDir)..\..\external\vlc\lib\Windows;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies);discord-rpc.lib;libcurl.lib;SDL2.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;SDL2main.lib;SDL2test.lib;SDL2_gfx.lib;libvlc.lib;libvlccore.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)..\..\assets" "$(TargetDir)\assets\" /E /Y</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
     <PostBuildEvent>
-      <Message>copies shit</Message>
+      <Message>
+      </Message>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>XCOPY "$(SolutionDir)..\..\assets" "$(TargetDir)\assets\" /E /Y
+
+XCOPY "$(ProjectDir)..\..\external\discord-rpc\dll\x64\*.*" "$(TargetDir)" /Y
+
+xcopy /Y "$(ProjectDir)..\..\external\vlc\lib\Windows\*.dll" "$(OutDir)"
+
+xcopy /Y "$(ProjectDir)..\..\external\dll\*.dll" "$(OutDir)"
+
+XCOPY "$(ProjectDir)..\..\external\vlc\plugins" "$(TargetDir)\plugins\" /E /Y</Command>
+      <Message>copies shit</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

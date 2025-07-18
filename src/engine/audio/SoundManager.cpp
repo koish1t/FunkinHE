@@ -1,12 +1,8 @@
-#include <SDL2/SDL.h>
 #include "SoundManager.h"
 #include <iostream>
 #include "../utils/Log.h"
 
-SoundManager::SoundManager() : currentMusic(nullptr) {
-    musicPosition = 0.0f;
-    lastMusicTick = SDL_GetTicks();
-}
+SoundManager::SoundManager() : currentMusic(nullptr) {}
 
 SoundManager::~SoundManager() {
     for (auto& pair : sounds) {
@@ -37,9 +33,6 @@ void SoundManager::playMusic(const std::string& path, float volume) {
     if (Mix_PlayMusic(currentMusic, -1) == -1) {
         Log::getInstance().error("Failed to play music: " + std::string(Mix_GetError()));
     }
-
-    musicPosition = 0.0f;
-    lastMusicTick = SDL_GetTicks();
 }
 
 void SoundManager::loopMusic(const std::string& path, float volume, int loops) {
@@ -102,15 +95,5 @@ void SoundManager::playSound(const std::string& path, float volume) {
     if (sound) {
         sound->setVolume(volume);
         sound->play();
-    }
-}
-
-float SoundManager::getMusicPosition() {
-    return musicPosition;
-}
-
-void SoundManager::updateMusicPosition(float deltaTime) {
-    if (Mix_PlayingMusic()) {
-        musicPosition += deltaTime * 1000.0f;
     }
 } 
