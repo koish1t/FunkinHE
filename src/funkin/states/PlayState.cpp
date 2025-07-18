@@ -85,12 +85,16 @@ void PlayState::loadSongConfig() {
 }
 
 void PlayState::create() {
+    Mix_HaltChannel(-1);
+    Engine::getInstance()->getSoundManager().stopMusic();
+    Conductor::songPosition = 0;
+    startingSong = true;
+    startedCountdown = false;
     Engine* engine = Engine::getInstance();
 
     loadSongConfig();
     startCountdown();
     generateNotes();
-    startingSong = true;
     #ifdef __SWITCH__
     // nun
     #elif defined(__MINGW32__)
@@ -123,7 +127,9 @@ void PlayState::update(float deltaTime) {
             }
         }
 
-        Conductor::songPosition += deltaTime * 1000.0f;
+        if (!startingSong && musicStartTicks > 0) {
+            Conductor::songPosition = static_cast<float>(SDL_GetTicks() - musicStartTicks);
+        }
 
         while (!unspawnNotes.empty()) {
             Note* nextNote = unspawnNotes[0];
@@ -290,6 +296,7 @@ void PlayState::generateSong(std::string dataPath) {
 
 void PlayState::startSong() {
     startingSong = false;
+    musicStartTicks = SDL_GetTicks();
     if (vocals != nullptr) {
         vocals->play();
     }

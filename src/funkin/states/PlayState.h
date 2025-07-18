@@ -121,4 +121,5 @@ private:
     Text* scoreText;
     void updateScoreText();
     float pauseCooldown = 0.0f;
+    Uint32 musicStartTicks = 0;
 };

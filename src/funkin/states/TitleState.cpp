@@ -6,6 +6,7 @@
 #include <SDL2/SDL.h>
 #include <thread>
 #include <chrono>
+#include "../states/MainMenuState.h"
 
 TitleState::TitleState() {}
 TitleState::~TitleState() { destroy(); }
@@ -80,7 +81,8 @@ void TitleState::update(float deltaTime) {
         if (enter) enter->playAnim("ENTER PRESSED");
         if (confirm) confirm->play();
         f = true;
-        // MAIN MENU STATE HERE LMAO
+        Engine::getInstance()->switchState(new MainMenuState());
+        Input::UpdateKeyStates();
     }
 }
 
@@ -111,13 +113,12 @@ void TitleState::destroy() {
     for (auto* alpha : alphabets) {
         if (alpha) {
             alpha->removeFromEngine();
-            delete alpha;
         }
     }
     alphabets.clear();
-    if (gf) { delete gf; gf = nullptr; }
-    if (logo) { delete logo; logo = nullptr; }
-    if (enter) { delete enter; enter = nullptr; }
+    if (gf) { gf = nullptr; }
+    if (logo) { logo = nullptr; }
+    if (enter) { enter = nullptr; }
 }
 
 void TitleState::createCoolText(const std::vector<std::string>& lines) {
