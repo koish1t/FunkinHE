@@ -36,12 +36,14 @@
     <ClCompile Include="..\..\src\engine\utils\Log.cpp" />
     <ClCompile Include="..\..\src\engine\utils\Paths.cpp" />
     <ClCompile Include="..\..\src\funkin\FunkinState.cpp" />
+    <ClCompile Include="..\..\src\funkin\game\Alphabet.cpp" />
     <ClCompile Include="..\..\src\funkin\game\Conductor.cpp" />
     <ClCompile Include="..\..\src\funkin\game\GameConfig.cpp" />
     <ClCompile Include="..\..\src\funkin\game\Note.cpp" />
     <ClCompile Include="..\..\src\funkin\game\Section.cpp" />
     <ClCompile Include="..\..\src\funkin\game\Song.cpp" />
     <ClCompile Include="..\..\src\funkin\states\PlayState.cpp" />
+    <ClCompile Include="..\..\src\funkin\states\TitleState.cpp" />
     <ClCompile Include="..\..\src\funkin\substates\PauseSubState.cpp" />
     <ClCompile Include="..\..\src\main.cpp" />
     <ClCompile Include="..\..\src\thirdparty\stb_image_impl.cpp" />
