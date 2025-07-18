@@ -114,11 +114,5 @@
     <ClCompile Include="..\..\src\funkin\substates\PauseSubState.cpp">
       <Filter>Source Files\funkin\substates</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\game\Alphabet.cpp">
-      <Filter>Source Files\funkin\game</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\funkin\states\TitleState.cpp">
-      <Filter>Source Files\funkin\states</Filter>
-    </ClCompile>
   </ItemGroup>
 </Project>
