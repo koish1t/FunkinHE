@@ -5,6 +5,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <algorithm>
 
+class Camera;
+
 class Text {
 public:
     Text(float x = 0, float y = 0, int z = 0);
@@ -33,6 +35,9 @@ public:
     
     void setAlpha(float alpha) { this->alpha = std::clamp(alpha, 0.0f, 1.0f); updateTexture(); }
     float getAlpha() const { return alpha; }
+    
+    void setCamera(Camera* camera);
+    Camera* getCamera() const { return camera; }
 
 protected:
     float x;
@@ -54,4 +59,5 @@ private:
     SDL_Texture* texture;
     bool isVisible;
     float alpha = 1.0f;
+    Camera* camera = nullptr;
 };

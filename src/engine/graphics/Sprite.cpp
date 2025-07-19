@@ -34,6 +34,10 @@ void Sprite::render() {
     destRect.w = static_cast<int>(width * scale.x);
     destRect.h = static_cast<int>(height * scale.y);
 
+    if (camera) {
+        camera->applyTransform(destRect);
+    }
+
     SDL_RenderCopy(SDLManager::getInstance().getRenderer(), texture, nullptr, &destRect);
 }
 

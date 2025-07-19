@@ -70,6 +70,7 @@ public:
     Sound* getVocals() const { return vocals; }
     Stage* getCurrentStage() const { return currentStage; }
     Camera* getCamGame() const { return camGame; }
+    Camera* getCamHUD() const { return camHUD; }
 
 private:
     std::string curSong;
@@ -78,6 +79,7 @@ private:
     std::vector<Note*> notes;
     Stage* currentStage = nullptr;
     Camera* camGame = nullptr;
+    Camera* camHUD = nullptr;
     const float STRUM_X = 42.0f;
     const float STRUM_X_MIDDLESCROLL = -278.0f;
     const std::vector<std::string> NOTE_STYLES = {"arrow", "arrow", "arrow", "arrow"};
@@ -90,6 +92,7 @@ private:
     void loadSongConfig();
     void loadStage();
     void updateCameraZoom();
+    void setupHUDCamera();
     void handleOpponentNoteHit(float deltaTime);
     SDL_Scancode getScancodeFromString(const std::string& keyName);
     SDL_GameControllerButton getButtonFromString(const std::string& buttonName);

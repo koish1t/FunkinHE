@@ -1,5 +1,6 @@
 #include "Text.h"
 #include "../core/SDLManager.h"
+#include "Camera.h"
 #include <iostream>
 #include <sstream>
 
@@ -99,6 +100,10 @@ void Text::renderText(const std::string& text, float x, float y) {
     
     SDL_SetTextureAlphaMod(textTexture, static_cast<Uint8>(alpha * 255));
     
+    if (camera) {
+        camera->applyTransform(destRect);
+    }
+    
     SDL_RenderCopy(SDLManager::getInstance().getRenderer(), textTexture, nullptr, &destRect);
     SDL_DestroyTexture(textTexture);
 }
@@ -122,3 +127,7 @@ void Text::setPosition(float x, float y) {
 }
 
 void Text::update(float deltaTime) {}
+
+void Text::setCamera(Camera* camera) {
+    this->camera = camera;
+}

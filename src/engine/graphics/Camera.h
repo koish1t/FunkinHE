@@ -24,4 +24,6 @@ public:
     float getZoom() const {
         return zoom;
     }
+    
+    void applyTransform(SDL_Rect& rect);
 };

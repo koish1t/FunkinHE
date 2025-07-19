@@ -53,6 +53,11 @@ PlayState::~PlayState() {
         camGame = nullptr;
     }
     
+    if (camHUD) {
+        delete camHUD;
+        camHUD = nullptr;
+    }
+    
     for (auto arrow : strumLineNotes) {
         delete arrow;
     }
@@ -139,6 +144,12 @@ void PlayState::updateCameraZoom() {
     }
 }
 
+void PlayState::setupHUDCamera() {
+    if (camHUD && scoreText) {
+        scoreText->setCamera(camHUD);
+    }
+}
+
 void PlayState::create() {
     Mix_HaltChannel(-1);
     Engine::getInstance()->getSoundManager().stopMusic();
@@ -147,6 +158,11 @@ void PlayState::create() {
     startedCountdown = false;
     Engine* engine = Engine::getInstance();
     camGame = new Camera();
+    camHUD = new Camera();
+    camHUD->setZoom(1.0f);
+    
+    setupHUDCamera();
+    
     loadSongConfig();
     loadStage();
     startCountdown();
@@ -383,12 +399,6 @@ void PlayState::render() {
         currentStage->render();
     }
 
-    for (auto arrow : strumLineNotes) {
-        if (arrow && arrow->isVisible()) {
-            arrow->render();
-        }
-    }
-
     for (auto note : notes) {
         if (note && note->isVisible()) {
             note->render();
@@ -399,7 +409,21 @@ void PlayState::render() {
         camGame->end();
     }
 
+    if (camHUD) {
+        camHUD->begin();
+    }
+    
+    for (auto arrow : strumLineNotes) {
+        if (arrow && arrow->isVisible()) {
+            arrow->render();
+        }
+    }
+    
     scoreText->render();
+    
+    if (camHUD) {
+        camHUD->end();
+    }
 
     static int lastNoteCount = 0;
     if (notes.size() != lastNoteCount) {
@@ -448,6 +472,10 @@ void PlayState::generateStaticArrows(int player) {
         babyArrow->setPosition(xOffset, yPos);
         
         babyArrow->setScale(0.7f, 0.7f);
+    
+        if (camHUD) {
+            babyArrow->setCamera(camHUD);
+        }
 
         strumLineNotes.push_back(babyArrow);
         babyArrow->setVisible(true);
@@ -517,6 +545,10 @@ void PlayState::generateNotes() {
                 float xOffset = baseX - (totalWidth * 0.5f) + (noteType * arrowSpacing);
                 note->setPosition(xOffset, 0);
                 
+                if (camGame) {
+                    note->setCamera(camGame);
+                }
+                
                 unspawnNotes.push_back(note);
                 totalNotes++;
             }
@@ -552,7 +584,7 @@ void PlayState::openSubState(SubState* subState) {
 }
 
 void PlayState::updateScoreText() {
-    std::string text = "Score: " + std::to_string(score) + " Misses: " + std::to_string(misses);
+    std::string text = "Score: " + std::to_string(score);
     scoreText->setText(text);
 }
 
