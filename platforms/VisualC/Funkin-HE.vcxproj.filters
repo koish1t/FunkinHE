@@ -123,5 +123,8 @@
     <ClCompile Include="..\..\src\funkin\states\MainMenuState.cpp">
       <Filter>Source Files\funkin\states</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\funkin\game\Stage.cpp">
+      <Filter>Source Files\funkin\game</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -43,6 +43,16 @@ PlayState::~PlayState() {
         inst = nullptr;
     }
     
+    if (currentStage) {
+        delete currentStage;
+        currentStage = nullptr;
+    }
+    
+    if (camGame) {
+        delete camGame;
+        camGame = nullptr;
+    }
+    
     for (auto arrow : strumLineNotes) {
         delete arrow;
     }
@@ -84,6 +94,51 @@ void PlayState::loadSongConfig() {
     }
 }
 
+void PlayState::loadStage() {
+    if (currentStage) {
+        delete currentStage;
+        currentStage = nullptr;
+    }
+
+    std::string stageName = "stage";
+    
+    /*
+    if (curSong.find("swag") != std::string::npos) {
+        stageName = "swagstage";
+    }
+        */
+    
+    try {
+        currentStage = new Stage(stageName);
+        if (!currentStage->isStageLoaded()) {
+            Log::getInstance().warning("Failed to load stage: " + stageName + ", using default stage");
+            delete currentStage;
+            currentStage = new Stage("stage");
+        }
+        
+        Log::getInstance().info("Loaded stage: " + stageName);
+        
+        if (camGame) {
+            currentStage->setCamera(camGame);
+        }
+    } catch (const std::exception& e) {
+        Log::getInstance().error("Error loading stage: " + std::string(e.what()));
+        currentStage = new Stage("stage");
+        if (camGame) {
+            currentStage->setCamera(camGame);
+        }
+    }
+}
+
+void PlayState::updateCameraZoom() {
+    if (camGame && currentStage) {
+        float targetZoom = currentStage->getDefaultZoom();
+        if (camGame->getZoom() != targetZoom) {
+            camGame->setZoom(targetZoom);
+        }
+    }
+}
+
 void PlayState::create() {
     Mix_HaltChannel(-1);
     Engine::getInstance()->getSoundManager().stopMusic();
@@ -91,8 +146,9 @@ void PlayState::create() {
     startingSong = true;
     startedCountdown = false;
     Engine* engine = Engine::getInstance();
-
+    camGame = new Camera();
     loadSongConfig();
+    loadStage();
     startCountdown();
     generateNotes();
     #ifdef __SWITCH__
@@ -169,6 +225,12 @@ void PlayState::update(float deltaTime) {
                 }
             }
         }
+
+        if (currentStage) {
+            currentStage->update(deltaTime);
+        }
+        
+        updateCameraZoom();
 
         if (pauseCooldown > 0) {
             pauseCooldown -= deltaTime;
@@ -313,6 +375,14 @@ void PlayState::startCountdown() {
 }
 
 void PlayState::render() {
+    if (camGame) {
+        camGame->begin();
+    }
+
+    if (currentStage) {
+        currentStage->render();
+    }
+
     for (auto arrow : strumLineNotes) {
         if (arrow && arrow->isVisible()) {
             arrow->render();
@@ -323,6 +393,10 @@ void PlayState::render() {
         if (note && note->isVisible()) {
             note->render();
         }
+    }
+
+    if (camGame) {
+        camGame->end();
     }
 
     scoreText->render();
@@ -341,6 +415,11 @@ void PlayState::render() {
 void PlayState::generateStaticArrows(int player) {
     int windowWidth, windowHeight;
     SDL_GetWindowSize(SDLManager::getInstance().getWindow(), &windowWidth, &windowHeight);
+    
+    float cameraZoom = 1.0f;
+    if (currentStage) {
+        cameraZoom = currentStage->getDefaultZoom();
+    }
     
     float startX = (player == 1) ? (windowWidth * 0.75f) : (windowWidth * 0.25f);
     float yPos = GameConfig::getInstance()->isDownscroll() ? (windowHeight - 150.0f) : 50.0f;
@@ -425,6 +504,11 @@ void PlayState::generateNotes() {
                 Note* note = new Note(strumTime, noteType, prevNote, sustainNote);
                 note->mustPress = mustPress;
                 note->sustainLength = sustainLength;
+                
+                float cameraZoom = 1.0f;
+                if (currentStage) {
+                    cameraZoom = currentStage->getDefaultZoom();
+                }
                 
                 float baseX = mustPress ? (Engine::getInstance()->getWindowWidth() * 0.75f) 
                                       : (Engine::getInstance()->getWindowWidth() * 0.25f);

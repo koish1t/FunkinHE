@@ -16,4 +16,12 @@ public:
         this->x = x;
         this->y = y;
     }
+    
+    void setZoom(float newZoom) {
+        zoom = newZoom;
+    }
+    
+    float getZoom() const {
+        return zoom;
+    }
 };

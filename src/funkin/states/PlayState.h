@@ -10,7 +10,9 @@
 #include "../game/Song.h"
 #include "../game/Note.h"
 #include "../game/GameConfig.h"
+#include "../game/Stage.h"
 #include "../FunkinState.h"
+#include "../../engine/graphics/Camera.h"
 #include "../../engine/core/SDLManager.h"
 #include "../../engine/graphics/Text.h"
 #include "../../engine/core/Engine.h"
@@ -66,12 +68,16 @@ public:
     int score = 0;
     int misses = 0;
     Sound* getVocals() const { return vocals; }
+    Stage* getCurrentStage() const { return currentStage; }
+    Camera* getCamGame() const { return camGame; }
 
 private:
     std::string curSong;
     Sound* vocals = nullptr;
     std::vector<AnimatedSprite*> strumLineNotes;
     std::vector<Note*> notes;
+    Stage* currentStage = nullptr;
+    Camera* camGame = nullptr;
     const float STRUM_X = 42.0f;
     const float STRUM_X_MIDDLESCROLL = -278.0f;
     const std::vector<std::string> NOTE_STYLES = {"arrow", "arrow", "arrow", "arrow"};
@@ -82,6 +88,8 @@ private:
 
     void loadKeybinds();
     void loadSongConfig();
+    void loadStage();
+    void updateCameraZoom();
     void handleOpponentNoteHit(float deltaTime);
     SDL_Scancode getScancodeFromString(const std::string& keyName);
     SDL_GameControllerButton getButtonFromString(const std::string& buttonName);

@@ -1,0 +1,33 @@
+{
+  "defaultCamZoom": 0.8,
+  "camera": {
+    "zoom": 0.8,
+    "followTarget": "boyfriend"
+  },
+  "sprites": [
+    {
+      "name": "bg",
+      "path": "images/stageback.png",
+      "x": -600,
+      "y": -200,
+      "scale": 1.0,
+      "alpha": 1.0
+    },
+    {
+      "name": "stageFront",
+      "path": "images/stagefront.png",
+      "x": -650,
+      "y": 600,
+      "scale": 1.1,
+      "alpha": 1.0
+    },
+    {
+      "name": "stageCurtains",
+      "path": "images/stagecurtains.png",
+      "x": -500,
+      "y": -300,
+      "scale": 0.9,
+      "alpha": 1.0
+    }
+  ]
+} 
