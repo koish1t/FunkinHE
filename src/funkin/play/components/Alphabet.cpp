@@ -1,6 +1,6 @@
 #include "Alphabet.h"
-#include "../../engine/utils/Paths.h"
-#include "../../engine/core/Engine.h"
+#include "../../../engine/utils/Paths.h"
+#include "../../../engine/core/Engine.h"
 #include <cctype>
 #include <vector>
 #include <sstream>

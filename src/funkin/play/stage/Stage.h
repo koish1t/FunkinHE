@@ -4,9 +4,9 @@
 #include <vector>
 #include <memory>
 #include <map>
-#include "../../engine/graphics/Sprite.h"
-#include "../../engine/graphics/Camera.h"
-#include "../../funkin/backend/json.hpp"
+#include "../../../engine/graphics/Sprite.h"
+#include "../../../engine/graphics/Camera.h"
+#include "../../backend/json.hpp"
 
 using json = nlohmann::json;
 

@@ -2,7 +2,7 @@
 
 #include "../engine/core/State.h"
 #include "../engine/audio/Sound.h"
-#include "game/Conductor.h"
+#include "play/components/Conductor.h"
 
 class FunkinState : public State {
 public:

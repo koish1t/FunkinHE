@@ -6,7 +6,7 @@
 #include <SDL2/SDL.h>
 #include <thread>
 #include <chrono>
-#include "../states/MainMenuState.h"
+#include "mainmenu/MainMenuState.h"
 
 TitleState::TitleState() {}
 TitleState::~TitleState() { destroy(); }

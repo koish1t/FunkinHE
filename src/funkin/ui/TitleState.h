@@ -5,7 +5,7 @@
 #include "../../engine/audio/Sound.h"
 #include <vector>
 #include <string>
-#include "../game/Alphabet.h"
+#include "../play/components/Alphabet.h"
 
 class TitleState : public FunkinState {
 public:

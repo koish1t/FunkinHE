@@ -1,11 +1,11 @@
 #include "MainMenuState.h"
-#include "../states/PlayState.h"
-#include "../../engine/core/Engine.h"
-#include "../../engine/input/Input.h"
-#include "../../engine/utils/Paths.h"
-#include "../../engine/audio/SoundManager.h"
-#include "../../engine/graphics/AnimatedSprite.h"
-#include "../../engine/graphics/Sprite.h"
+#include "../../play/PlayState.h"
+#include "../../../engine/core/Engine.h"
+#include "../../../engine/input/Input.h"
+#include "../../../engine/utils/Paths.h"
+#include "../../../engine/audio/SoundManager.h"
+#include "../../../engine/graphics/AnimatedSprite.h"
+#include "../../../engine/graphics/Sprite.h"
 #include <SDL2/SDL.h>
 #include <iostream>
 

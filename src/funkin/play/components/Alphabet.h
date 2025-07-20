@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <string>
-#include "../../engine/graphics/AnimatedSprite.h"
+#include "../../../engine/graphics/AnimatedSprite.h"
 
 class Alphabet {
 public:

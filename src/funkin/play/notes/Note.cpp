@@ -1,6 +1,10 @@
 #include "Note.h"
-#include "../states/PlayState.h"
-#include "../game/Conductor.h"
+#include "../PlayState.h"
+#include "../components/Conductor.h"
+#include "../components/GameConfig.h"
+#include "../../../engine/core/Engine.h"
+#include "../../../engine/core/SDLManager.h"
+#include "../../../engine/utils/Log.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>

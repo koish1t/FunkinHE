@@ -22,17 +22,23 @@
     <Filter Include="Source Files\funkin">
       <UniqueIdentifier>{5abff412-4af6-4f07-a4f3-604bbe42cca8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\funkin\game">
-      <UniqueIdentifier>{4e0f3532-ec0f-4f41-b03a-a191b4d95510}</UniqueIdentifier>
+    <Filter Include="Source Files\funkin\play">
+      <UniqueIdentifier>{d410fbea-5ddd-451d-97bc-eb07500421a0}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\funkin\states">
-      <UniqueIdentifier>{7d6cb984-d8aa-459f-b78a-8ae4e4496552}</UniqueIdentifier>
+    <Filter Include="Source Files\funkin\play\components">
+      <UniqueIdentifier>{deecaa91-c778-4fab-8f1c-972d33ab8576}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\funkin\substates">
-      <UniqueIdentifier>{875805d4-f454-4c62-bd5c-e0f562c154fa}</UniqueIdentifier>
+    <Filter Include="Source Files\funkin\play\notes">
+      <UniqueIdentifier>{a1c1ef2e-dcf0-44ff-a95a-593fa7fea64f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\funkin\backend">
-      <UniqueIdentifier>{78404b7b-d4c1-41d5-9215-879f862b7fc2}</UniqueIdentifier>
+    <Filter Include="Source Files\funkin\play\stage">
+      <UniqueIdentifier>{aa5d8e99-5a83-403b-a124-3ef43298ba72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\funkin\ui">
+      <UniqueIdentifier>{448ef612-e76e-48f7-ab48-bcb52719f694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\funkin\ui\mainmenu">
+      <UniqueIdentifier>{ba6b593c-cc53-4a79-af6a-6e1c2dddcbee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,38 +99,38 @@
     <ClCompile Include="..\..\src\funkin\FunkinState.cpp">
       <Filter>Source Files\funkin</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\game\Conductor.cpp">
-      <Filter>Source Files\funkin\game</Filter>
+    <ClCompile Include="..\..\src\funkin\play\PlayState.cpp">
+      <Filter>Source Files\funkin\play</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\game\GameConfig.cpp">
-      <Filter>Source Files\funkin\game</Filter>
+    <ClCompile Include="..\..\src\funkin\play\components\Alphabet.cpp">
+      <Filter>Source Files\funkin\play\components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\game\Note.cpp">
-      <Filter>Source Files\funkin\game</Filter>
+    <ClCompile Include="..\..\src\funkin\play\components\Conductor.cpp">
+      <Filter>Source Files\funkin\play\components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\game\Section.cpp">
-      <Filter>Source Files\funkin\game</Filter>
+    <ClCompile Include="..\..\src\funkin\play\components\GameConfig.cpp">
+      <Filter>Source Files\funkin\play\components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\game\Song.cpp">
-      <Filter>Source Files\funkin\game</Filter>
+    <ClCompile Include="..\..\src\funkin\play\components\PauseSubState.cpp">
+      <Filter>Source Files\funkin\play\components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\states\PlayState.cpp">
-      <Filter>Source Files\funkin\states</Filter>
+    <ClCompile Include="..\..\src\funkin\play\components\Section.cpp">
+      <Filter>Source Files\funkin\play\components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\substates\PauseSubState.cpp">
-      <Filter>Source Files\funkin\substates</Filter>
+    <ClCompile Include="..\..\src\funkin\play\components\Song.cpp">
+      <Filter>Source Files\funkin\play\components</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\game\Alphabet.cpp">
-      <Filter>Source Files\funkin\game</Filter>
+    <ClCompile Include="..\..\src\funkin\play\notes\Note.cpp">
+      <Filter>Source Files\funkin\play\notes</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\states\TitleState.cpp">
-      <Filter>Source Files\funkin\states</Filter>
+    <ClCompile Include="..\..\src\funkin\play\stage\Stage.cpp">
+      <Filter>Source Files\funkin\play\stage</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\states\MainMenuState.cpp">
-      <Filter>Source Files\funkin\states</Filter>
+    <ClCompile Include="..\..\src\funkin\ui\TitleState.cpp">
+      <Filter>Source Files\funkin\ui</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\funkin\game\Stage.cpp">
-      <Filter>Source Files\funkin\game</Filter>
+    <ClCompile Include="..\..\src\funkin\ui\mainmenu\MainMenuState.cpp">
+      <Filter>Source Files\funkin\ui\mainmenu</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

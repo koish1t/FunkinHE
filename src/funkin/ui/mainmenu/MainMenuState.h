@@ -1,7 +1,7 @@
 #pragma once
-#include "../../engine/audio/Sound.h"
-#include "../../engine/graphics/AnimatedSprite.h"
-#include "../FunkinState.h"
+#include "../../../engine/audio/Sound.h"
+#include "../../../engine/graphics/AnimatedSprite.h"
+#include "../../FunkinState.h"
 #include <vector>
 #include <string>
 

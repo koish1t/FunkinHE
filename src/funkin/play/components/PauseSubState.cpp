@@ -1,20 +1,11 @@
-#ifdef __MINGW32__ || defined(__SWITCH__)
-#include "funkin/substates/PauseSubState.h"
-#include "engine/core/Engine.h"
-#include "engine/input/Input.h"
-#include "engine/core/SDLManager.h"
-#include "engine/audio/SoundManager.h"
-#include "funkin/states/PlayState.h"
+#include "PauseSubState.h"
+#include "../../../engine/core/Engine.h"
+#include "../../../engine/input/Input.h"
+#include "../../../engine/core/SDLManager.h"
+#include "../../../engine/audio/SoundManager.h"
+#include "../PlayState.h"
+#include "../../../engine/graphics/Text.h"
 #include <iostream>
-#else
-#include "../funkin/substates/PauseSubState.h"
-#include <core/Engine.h>
-#include <input/Input.h>
-#include <core/SDLManager.h>
-#include <audio/SoundManager.h>
-#include "../funkin/states/PlayState.h"
-#include <iostream>
-#endif
 
 PauseSubState::PauseSubState() : pauseText(nullptr) {
 }

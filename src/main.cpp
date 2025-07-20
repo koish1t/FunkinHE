@@ -1,15 +1,15 @@
 #ifdef __MINGW32__
 #include "../engine/core/Engine.h"
-#include "funkin/states/TitleState.h"
+#include "funkin/ui/TitleState.h"
 #include "../engine/input/Input.h"
 #elif defined(__SWITCH__)
 #include "../engine/core/Engine.h"
-#include "funkin/states/TitleState.h"
+#include "funkin/ui/TitleState.h"
 #include "../engine/input/Input.h"
 #include <switch.h>
 #else
 #include <core/Engine.h>
-#include "funkin/states/TitleState.h"
+#include "funkin/ui/TitleState.h"
 #include <input/Input.h>
 #include <utils/Discord.h>
 #endif

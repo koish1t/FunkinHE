@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "../backend/json.hpp"
+#include "../../backend/json.hpp"
 
 class GameConfig {
 private:

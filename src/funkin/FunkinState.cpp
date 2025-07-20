@@ -2,7 +2,7 @@
 #include <cmath>
 #include <algorithm>
 #include <iostream>
-#include "game/Conductor.h"
+#include "play/components/Conductor.h"
 
 const std::string FunkinState::soundExt = ".ogg";
 

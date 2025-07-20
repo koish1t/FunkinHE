@@ -1,9 +1,9 @@
 #include "Song.h"
-#include "../backend/json.hpp"
+#include "../../backend/json.hpp"
 #include <fstream>
 #include <iostream>
 #include <filesystem>
-#include "../engine/utils/Log.h"
+#include "../../../engine/utils/Log.h"
 
 using json = nlohmann::json;
 

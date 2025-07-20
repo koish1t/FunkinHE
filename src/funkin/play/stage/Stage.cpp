@@ -1,6 +1,6 @@
 #include "Stage.h"
-#include "../../engine/utils/Paths.h"
-#include "../../engine/utils/Log.h"
+#include "../../../engine/utils/Paths.h"
+#include "../../../engine/utils/Log.h"
 #include <fstream>
 #include <sstream>
 #include <iostream>

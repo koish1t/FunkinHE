@@ -1,8 +1,8 @@
 #include "PlayState.h"
 #include <iostream>
 #include <algorithm>
-#include "../game/Song.h"
-#include "../game/Conductor.h"
+#include "components/Song.h"
+#include "components/Conductor.h"
 #include <fstream>
 #include <map>
 #ifdef __SWITCH__ 
